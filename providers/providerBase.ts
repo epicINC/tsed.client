@@ -84,17 +84,17 @@ class RESTfulClient<T> {
 		return this.http.get<R, R>(path, { params })
 	}
 
-	post<R = T>(path: string, data: Partial<T>) : Promise<R>
-	post<R = T>(path: string, data: Partial<T>[]) : Promise<R[]>
-	post<R = T>(path: string, data: Partial<T> | Partial<T>[]) : Promise<R | R[]> {
+	post<R = T>(path: string, data: Record<string, unknown>) : Promise<R>
+	post<R = T>(path: string, data: Record<string, unknown>[]) : Promise<R[]>
+	post<R = T>(path: string, data: Record<string, unknown> | Record<string, unknown>[]) : Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('post')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
 		return this.http.post<R, R>(path, data)
 	}
 
-	patch<R = T>(path: string, data: Partial<T>) : Promise<R>
-	patch<R = T>(path: string, data: Partial<T>[]) : Promise<R[]>
-	patch<R = T>(path: string, data: Partial<T> | Partial<T>[]) : Promise<R | R[]> {
+	patch<R = T>(path: string, data: Record<string, unknown>) : Promise<R>
+	patch<R = T>(path: string, data: Record<string, unknown>[]) : Promise<R[]>
+	patch<R = T>(path: string, data: Record<string, unknown> | Record<string, unknown>[]) : Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('patch')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
 		return this.http.patch<R,R>(path, data)
@@ -102,7 +102,7 @@ class RESTfulClient<T> {
 
 
 	/** upsert */
-	put<R = T>(path: string, data: Partial<T>) {
+	put<R = T>(path: string, data: Record<string, unknown>) {
 		return this.http.put<R,R>(path, data)
 	}
 
