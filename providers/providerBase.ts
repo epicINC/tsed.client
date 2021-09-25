@@ -10,7 +10,7 @@ const clients: AxiosInstance[] = []
 export function Authorization(token: string) {
 	clients.forEach(e => {
 		if (token)
-			e.defaults.headers.Authorization = `Bearer ${ContextStorages.get()?.authorization}`
+			e.defaults.headers.Authorization = `Bearer ${token}`
 		else
 			Reflect.deleteProperty(e.defaults.headers, 'Authorization')
 	})
