@@ -141,6 +141,8 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 	find<R = T>(id: number | string) : Promise<R | null>
 	find<R = T>(query: IQueryParam<T>) : Promise<R | null>
 	find<R = T>(query: any) : Promise<R | null> {
+		if (query === null || query === undefined) throw new ArgumentNull('query')
+
 		try {
 			switch(typeof query) {
 				case 'string':
