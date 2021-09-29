@@ -28,3 +28,17 @@ export class NotValid extends StatusCodeException {
 	}
 
 }
+
+
+
+export class SystemException extends Error {
+
+}
+
+
+export class FormatException extends SystemException {
+
+	constructor(message?: string) {
+		super(message)
+	}
+}
