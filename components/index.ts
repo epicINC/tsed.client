@@ -12,3 +12,9 @@ export interface ILocalContext {
 export interface IThing {
 	id: number
 }
+
+
+export interface IRange<T> {
+	start: T
+	end: T
+}

@@ -54,7 +54,7 @@ function toRegex(format: string) {
 
 export class DateTimeImpl {
 
-	static startOf(data: Date, unit: DatePartKey = 'day') {
+	startOf(data: Date, unit: DatePartKey = 'day') {
 		const result = new Date(data.getTime())
 		switch(unit) {
 			case 'day':
@@ -64,7 +64,7 @@ export class DateTimeImpl {
 	}
 
 
-	static endOf(data: Date, unit: DatePartKey = 'day') {
+	endOf(data: Date, unit: DatePartKey = 'day') {
 		const result = new Date(data.getTime())
 		switch(unit) {
 			case 'day':
@@ -82,8 +82,12 @@ export class DateTimeImpl {
 		const groups = Object.fromEntries(Object.entries(part.groups).map(([key, val]) => [key, Number(val)])) as Partial<DatePart<number>>
 		console.log(groups)
 		return new Date(groups.year ?? 0, (groups.month && groups.month - 1) ?? 0, groups.day ?? 0, groups.hour ?? 0, groups.minute ?? 0, groups.second ?? 0, groups.millionths ?? 0)
+	}
 
 
+	toZhCNDate(date: Date) {
+
+		return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
 	}
 	
 }
@@ -91,5 +95,6 @@ export class DateTimeImpl {
 
 
 export const DateTimes = new DateTimeImpl
-
+// var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+// var reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/;
 // console.log(DateTimes.parseExact('2019-08-11 11:24:33.1234', 'yyyy-MM-dd HH:mm:ss.ffff'))

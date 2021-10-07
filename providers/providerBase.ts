@@ -48,9 +48,8 @@ export class RESTfulClient<T> {
 
 	constructor(baseURL: string ) {
 
-		if (!baseURL.startsWith('http'))
+		if (!baseURL.startsWith('http') && !baseURL.startsWith('/'))
 			baseURL = Strings.urlCombine('/api/v1', baseURL)
-		console.log('baseURL', baseURL)
 		this.http = WebClient.create({
 			baseURL,
 		})
@@ -68,7 +67,7 @@ export class RESTfulClient<T> {
 
 
 
-	async head(path: string, query: Record<string, unknown>) {
+	async head(path: string, query?: Record<string, unknown>) {
 		try {
 			await this.http.head<boolean>(path, {
 				data: query
@@ -102,7 +101,7 @@ export class RESTfulClient<T> {
 
 
 	/** upsert */
-	put<R = T>(path: string, data: Record<string, unknown>) {
+	put<R = T>(path: string, data: Record<string, unknown> | Record<string, unknown>[] | FormData) {
 		return this.http.put<R,R>(path, data)
 	}
 
@@ -123,7 +122,7 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 	protected readonly client: RESTfulClient<T>
 
 	constructor(url?: string) {
-		if (url && url.startsWith('http')) {
+		if (url && (url.startsWith('http') || url.startsWith('/'))) {
 			this.name = Strings.normalizeProviderName(this.constructor.name)
 			this.client = new RESTfulClient(url)
 			return
@@ -194,11 +193,7 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 	async save(data: Partial<T>) : Promise<T>
 	async save(data: Partial<T>[]) : Promise<T[]>
 	async save(data: Partial<T> | Partial<T>[]) : Promise<T | T[]> {
-		if (!Array.isArray(data)) return data.id ? this.update(data) : this.insert(data)
-
-		const result = Arrays.partition(data, e => !!e.id)
-
-		return [...await this.insert(result[1]), ...await this.update(result[0])]
+		return await this.client.put('/', data)
 	}
 
 

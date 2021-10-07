@@ -27,14 +27,15 @@ export type IPaingFilter = {
 }
 export type IOrderFilter = `${string} ${1 | -1 | 'asc' | 'desc' | '' | 0}`
 export type IWhereFilter<T> = {
-	[K in keyof T]?: T[K] | (T[K])[] | (OpValue<T[K]>)
+	[K in keyof T]?: OpValue<T[K]> | T[K] | (T[K])[]
 } & {
 	q?: string | string[]
 }
 
 
-type Op = 'eq' | 'and' | 'or' | 'gt' | 'gte' | 'lt' | 'lte' | 'between' | 'inq' | 'nin' | 'near' | 'neq' | 'like' | 'nlike' | 'ilike' | 'nilike'	 | 'regexp'
+
+type Op = '$eq' | '$and' | '$or' | '$gt' | '$gte' | '$lt' | '$lte' | '$between' | '$inq' | '$nin' | '$near' | '$neq' | '$like' | '$nlike' | '$ilike' | '$nilike' | '$regexp' | '$any' | '$all' | '$nany' | '$nall'
 type OpValue<T> = {
-	[K in Op]: T
+	[K in Op]?: T
 }
 
