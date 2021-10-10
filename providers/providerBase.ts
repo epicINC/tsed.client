@@ -67,7 +67,7 @@ export class RESTfulClient<T> {
 
 
 
-	async head(path: string, query?: Record<string, unknown>) {
+	async head(path: string, query?: object) {
 		try {
 			await this.http.head<boolean>(path, {
 				data: query
@@ -79,21 +79,21 @@ export class RESTfulClient<T> {
 	}
 
 
-	get<R = T>(path: string, params?: Record<string, unknown>) : Promise<R> {
+	get<R = T>(path: string, params?: object) : Promise<R> {
 		return this.http.get<R, R>(path, { params })
 	}
 
-	post<R = T>(path: string, data: Record<string, unknown>) : Promise<R>
-	post<R = T>(path: string, data: Record<string, unknown>[]) : Promise<R[]>
-	post<R = T>(path: string, data: Record<string, unknown> | Record<string, unknown>[]) : Promise<R | R[]> {
+	post<R = T>(path: string, data: object) : Promise<R>
+	post<R = T>(path: string, data: object[]) : Promise<R[]>
+	post<R = T>(path: string, data: object | object[]) : Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('post')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
 		return this.http.post<R, R>(path, data)
 	}
 
-	patch<R = T>(path: string, data: Record<string, unknown>) : Promise<R>
-	patch<R = T>(path: string, data: Record<string, unknown>[]) : Promise<R[]>
-	patch<R = T>(path: string, data: Record<string, unknown> | Record<string, unknown>[]) : Promise<R | R[]> {
+	patch<R = T>(path: string, data: object) : Promise<R>
+	patch<R = T>(path: string, data: object[]) : Promise<R[]>
+	patch<R = T>(path: string, data: object | object[]) : Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('patch')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
 		return this.http.patch<R,R>(path, data)
@@ -101,12 +101,12 @@ export class RESTfulClient<T> {
 
 
 	/** upsert */
-	put<R = T>(path: string, data: Record<string, unknown> | Record<string, unknown>[] | FormData) {
+	put<R = T>(path: string, data: object | object[] | FormData) {
 		return this.http.put<R,R>(path, data)
 	}
 
 
-	delete<R = T>(path: string, params?: Record<string, unknown>) : Promise<R> {
+	delete<R = T>(path: string, params?: object) : Promise<R> {
 		return this.http.delete<R, R>(path, { params })
 	}
 
