@@ -10,7 +10,7 @@ export type IQueryParam<T> = {
 	where?: IWhereFilter<T>
 }
 
-export type IQueryPagingParam<T> = IQueryParam<T> & Partial<IPaingFilter>
+export type IQueryPagingParam<T> = IQueryParam<T> & Partial<IPaingFilter> & {pagination?: boolean}
 
 
 
