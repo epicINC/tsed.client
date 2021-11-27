@@ -97,5 +97,5 @@ export class EnumFlagImpl {
 
 
 export const Enums = new EnumImpl
-export const EnumFlags = new EnumFlagImpl
+export const Flags = new EnumFlagImpl
 
