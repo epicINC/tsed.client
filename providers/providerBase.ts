@@ -49,7 +49,7 @@ export class RESTfulClient<T> {
 	constructor(baseURL: string ) {
 
 		if (!baseURL.startsWith('http') && !baseURL.startsWith('/'))
-			baseURL = Strings.urlCombine('/api/v1', baseURL)
+			baseURL = Strings.urlCombine('/api/v4', baseURL)
 		this.http = WebClient.create({
 			baseURL,
 		})
