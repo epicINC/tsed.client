@@ -70,4 +70,11 @@ export const OneToMany = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K>
 export const ManyToOne = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K>, c: any) {
 	return EmptyPropertyDecorator
 }
+export const JoinColumn = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K>, c: any) {
+	return EmptyPropertyDecorator
+}
+
+export const OneToOne = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K>, c: any) {
+	return EmptyPropertyDecorator
+}
 
