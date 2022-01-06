@@ -64,17 +64,17 @@ export const Column = DefaultProperty
 export const CreateDateColumn = DefaultProperty
 export const PrimaryGeneratedColumn = DefaultProperty
 export const PrimaryColumn = DefaultProperty
-export const OneToMany = function<T, K>(...args: any[]) {
+export const OneToMany = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
-export const ManyToOne = function<T, K>(...args: any[]) {
+export const ManyToOne = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
-export const JoinColumn = function<T, K>(...args: any[]) {
+export const JoinColumn = function<T, K>(a: object) {
 	return EmptyPropertyDecorator
 }
 
-export const OneToOne = function<T, K>(...args: any[]) {
+export const OneToOne = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
 
