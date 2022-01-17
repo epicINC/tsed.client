@@ -1,4 +1,5 @@
 
+type Func<T extends any[], R> = (...args: T) => R
 
 function DefaultClass(...data: any[]) : ClassDecorator {
 	return <TFunction extends Function>(target: TFunction) => {}
