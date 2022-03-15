@@ -200,7 +200,14 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 	remove(key: number | string) : Promise<T>
 	remove(filter: IWhereFilter<T>[]) : Promise<T[]>
 	remove(query: string | number | any) : Promise<T | T[]> {
-		return this.client.delete(query)
+
+		switch(typeof query) {
+			case 'string':
+			case 'number':
+				return this.client.delete(`/${query}`)
+			default:
+				return this.client.delete('/', query)
+		}
 	}
 
 }
