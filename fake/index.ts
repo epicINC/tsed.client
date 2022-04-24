@@ -1,20 +1,20 @@
 
 type Func<T extends any[], R> = (...args: T) => R
 
-function DefaultClass(...data: any[]) : ClassDecorator {
-	return <TFunction extends Function>(target: TFunction) => {}
+function DefaultClass(...data: any[]): ClassDecorator {
+	return <TFunction extends Function>(target: TFunction) => { }
 }
 
-const EmptyPropertyDecorator: PropertyDecorator = (...agrs: any[]) => {}
+const EmptyPropertyDecorator: PropertyDecorator = (...agrs: any[]) => { }
 
 
 
 function DefaultProperty(...data: any[]) {
-		const result = (...args: any[]) : any => {
-		}
-		result.MinItems = DefaultProperty
-		result.MaxItems = DefaultProperty
-		return result
+	const result = (...args: any[]): any => {
+	}
+	result.MinItems = DefaultProperty
+	result.MaxItems = DefaultProperty
+	return result
 }
 
 
@@ -47,7 +47,7 @@ export const CollectionOf = DefaultProperty as ArrayOfChainedDecorators
 // @tsed/common
 export const PlatformTest = {
 	get<T>(...args: any[]) {
-	
+
 	},
 	create() {
 
@@ -65,17 +65,22 @@ export const Column = DefaultProperty
 export const CreateDateColumn = DefaultProperty
 export const PrimaryGeneratedColumn = DefaultProperty
 export const PrimaryColumn = DefaultProperty
-export const OneToMany = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K> | object, c?: object) {
+
+export const DeleteDateColumn = DefaultProperty
+export const UpdateDateColumn = DefaultProperty
+
+
+
+export const OneToMany = function <T, K>(a: Func<[], { new(): T }>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
-export const ManyToOne = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K> | object, c?: object) {
+export const ManyToOne = function <T, K>(a: Func<[], { new(): T }>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
-export const JoinColumn = function<T, K>(a: object) {
+export const JoinColumn = function <T, K>(a: object) {
 	return EmptyPropertyDecorator
 }
 
-export const OneToOne = function<T, K>(a: Func<[], {new(): T}>, b: Func<[T], K> | object, c?: object) {
+export const OneToOne = function <T, K>(a: Func<[], { new(): T }>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
-
