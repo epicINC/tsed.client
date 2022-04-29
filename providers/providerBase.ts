@@ -18,35 +18,35 @@ export function Authorization(token: string) {
 
 export interface IProvider<T> {
 
-	exists(filter: IWhereFilter<T>) : Promise<boolean>
+	exists(filter: IWhereFilter<T>): Promise<boolean>
 
-	
-	find<R = T>(id: string | number) : Promise<R | null>
-	find<R = T>(query: IQueryParam<T>) : Promise<R | null>
 
-	findOrFail<R = T>(id: string | number) : Promise<R>
-	findOrFail<R = T>(query: IQueryParam<T>) : Promise<R>
+	find<R = T>(id: string | number): Promise<R | null>
+	find<R = T>(query: IQueryParam<T>): Promise<R | null>
 
-	query<R = T>(query: IQueryPagingParam<T>) : Promise<R[]>
-	paging<R = T>(query: IQueryPagingParam<T>) : Promise<[R[], number]>
+	findOrFail<R = T>(id: string | number): Promise<R>
+	findOrFail<R = T>(query: IQueryParam<T>): Promise<R>
 
-	insert(data: Partial<T>) : Promise<T>
-	insert(data: Partial<T>[]) : Promise<T[]>
+	query<R = T>(query: IQueryPagingParam<T>): Promise<R[]>
+	paging<R = T>(query: IQueryPagingParam<T>): Promise<[R[], number]>
 
-	update(data: Partial<T>) : Promise<T>
-	update(data: Partial<T>[]) : Promise<T[]>
+	insert(data: Partial<T>): Promise<T>
+	insert(data: Partial<T>[]): Promise<T[]>
 
-	save(data: Partial<T>) : Promise<T>
-	save(data: Partial<T>[]) : Promise<T[]>
+	update(data: Partial<T>): Promise<T>
+	update(data: Partial<T>[]): Promise<T[]>
 
-	remove(key: number | string) : Promise<T>
-	remove(filter: IWhereFilter<T>[]) : Promise<T[]>
+	save(data: Partial<T>): Promise<T>
+	save(data: Partial<T>[]): Promise<T[]>
+
+	remove(key: number | string): Promise<T>
+	remove(filter: IWhereFilter<T>[]): Promise<T[]>
 }
 
 export class RESTfulClient<T> {
 	protected readonly http: AxiosInstance
 
-	constructor(baseURL: string ) {
+	constructor(baseURL: string) {
 
 		if (!baseURL.startsWith('http') && !baseURL.startsWith('/'))
 			baseURL = Strings.urlCombine('/api/v4', baseURL)
@@ -59,9 +59,11 @@ export class RESTfulClient<T> {
 
 		this.http.interceptors.response.use(response => {
 			if (response.status > 199 && response.status < 300) return response.data
-			
+
+			throw new StatusCodeException(response.data.status, response.data.name + ':' + response.data.message)
 		}, error => {
-			return Promise.reject(new StatusCodeException(error.response.status, error.response.statusText))
+			if (!error.response.data) return Promise.reject(new StatusCodeException(error.response.status, error.response.statusText))
+			return Promise.reject(new StatusCodeException(error.response.data.status, error.response.data.name + ':' + error.response.data.message))
 		})
 	}
 
@@ -79,34 +81,34 @@ export class RESTfulClient<T> {
 	}
 
 
-	get<R = T>(path: string, params?: object) : Promise<R> {
+	get<R = T>(path: string, params?: object): Promise<R> {
 		return this.http.get<R, R>(path, { params })
 	}
 
-	post<R = T>(path: string, data: object) : Promise<R>
-	post<R = T>(path: string, data: object[]) : Promise<R[]>
-	post<R = T>(path: string, data: object | object[]) : Promise<R | R[]> {
+	post<R = T>(path: string, data: object): Promise<R>
+	post<R = T>(path: string, data: object[]): Promise<R[]>
+	post<R = T>(path: string, data: object | object[]): Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('post')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
 		return this.http.post<R, R>(path, data)
 	}
 
-	patch<R = T>(path: string, data: object) : Promise<R>
-	patch<R = T>(path: string, data: object[]) : Promise<R[]>
-	patch<R = T>(path: string, data: object | object[]) : Promise<R | R[]> {
+	patch<R = T>(path: string, data: object): Promise<R>
+	patch<R = T>(path: string, data: object[]): Promise<R[]>
+	patch<R = T>(path: string, data: object | object[]): Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('patch')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
-		return this.http.patch<R,R>(path, data)
+		return this.http.patch<R, R>(path, data)
 	}
 
 
 	/** upsert */
 	put<R = T>(path: string, data: object | object[] | FormData) {
-		return this.http.put<R,R>(path, data)
+		return this.http.put<R, R>(path, data)
 	}
 
 
-	delete<R = T>(path: string, params?: object) : Promise<R> {
+	delete<R = T>(path: string, params?: object): Promise<R> {
 		return this.http.delete<R, R>(path, { params })
 	}
 
@@ -137,13 +139,13 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 	}
 
 
-	find<R = T>(id: number | string) : Promise<R | null>
-	find<R = T>(query: IQueryParam<T>) : Promise<R | null>
-	find<R = T>(query: any) : Promise<R | null> {
+	find<R = T>(id: number | string): Promise<R | null>
+	find<R = T>(query: IQueryParam<T>): Promise<R | null>
+	find<R = T>(query: any): Promise<R | null> {
 		if (query === null || query === undefined) throw new ArgumentNull('query')
 
 		try {
-			switch(typeof query) {
+			switch (typeof query) {
 				case 'string':
 				case 'number':
 					return this.client.get<R>(`/${query}`)
@@ -151,7 +153,7 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 					query.limit = 1
 					return this.client.get<R[]>('/', query).then(e => e[0])
 			}
-		} catch(e) {
+		} catch (e) {
 			if (e instanceof StatusCodeException) {
 				if (e.statusCode === 404) return Promise.resolve(null)
 			}
@@ -159,9 +161,9 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 		}
 	}
 
-	findOrFail<R = T>(id: number | string) : Promise<R>
-	findOrFail<R = T>(query: IQueryParam<T>) : Promise<R>
-	findOrFail<R = T>(query: any) : Promise<R> {
+	findOrFail<R = T>(id: number | string): Promise<R>
+	findOrFail<R = T>(query: IQueryParam<T>): Promise<R>
+	findOrFail<R = T>(query: any): Promise<R> {
 		return this.find<R>(query).then(e => {
 			if (e !== undefined && e !== null) return e
 			return Promise.reject(new NotFound(this.name))
@@ -178,30 +180,30 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 		return this.client.get<[R[], number]>('/', query)
 	}
 
-	async insert(data: Partial<T>) : Promise<T>
-	async insert(data: Partial<T>[]) : Promise<T[]>
-	async insert(data: Partial<T> | Partial<T>[]) : Promise<T | T[]> {
+	async insert(data: Partial<T>): Promise<T>
+	async insert(data: Partial<T>[]): Promise<T[]>
+	async insert(data: Partial<T> | Partial<T>[]): Promise<T | T[]> {
 		return this.client.post('/', data as any)
 	}
 
-	async update(data: Partial<T>) : Promise<T>
-	async update(data: Partial<T>[]) : Promise<T[]>
-	async update(data: Partial<T> | Partial<T>[]) : Promise<T | T[]> {
+	async update(data: Partial<T>): Promise<T>
+	async update(data: Partial<T>[]): Promise<T[]>
+	async update(data: Partial<T> | Partial<T>[]): Promise<T | T[]> {
 		return this.client.patch('/', data as any)
 	}
 
-	async save(data: Partial<T>) : Promise<T>
-	async save(data: Partial<T>[]) : Promise<T[]>
-	async save(data: Partial<T> | Partial<T>[]) : Promise<T | T[]> {
+	async save(data: Partial<T>): Promise<T>
+	async save(data: Partial<T>[]): Promise<T[]>
+	async save(data: Partial<T> | Partial<T>[]): Promise<T | T[]> {
 		return await this.client.put('/', data)
 	}
 
 
-	remove(key: number | string) : Promise<T>
-	remove(filter: IWhereFilter<T>[]) : Promise<T[]>
-	remove(query: string | number | any) : Promise<T | T[]> {
+	remove(key: number | string): Promise<T>
+	remove(filter: IWhereFilter<T>[]): Promise<T[]>
+	remove(query: string | number | any): Promise<T | T[]> {
 
-		switch(typeof query) {
+		switch (typeof query) {
 			case 'string':
 			case 'number':
 				return this.client.delete(`/${query}`)
