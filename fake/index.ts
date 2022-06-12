@@ -39,6 +39,8 @@ export const Minimum = DefaultProperty
 export const Maximum = DefaultProperty
 export const MinLength = DefaultProperty
 export const Ignore = DefaultProperty
+export const Default = DefaultProperty
+
 
 export const CollectionOf = DefaultProperty as ArrayOfChainedDecorators
 
