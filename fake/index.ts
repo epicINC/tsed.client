@@ -41,6 +41,7 @@ export const MinLength = DefaultProperty
 export const Ignore = DefaultProperty
 export const Default = DefaultProperty
 export const Description = DefaultProperty
+export const Integer = DefaultProperty
 
 
 
