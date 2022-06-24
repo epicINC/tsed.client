@@ -10,6 +10,7 @@ const clients: AxiosInstance[] = []
 export function Authorization(token: string) {
 	clients.forEach(e => {
 		if (token)
+			// @ts-expect-error
 			e.defaults.headers.Authorization = `Bearer ${token}`
 		else
 			Reflect.deleteProperty(e.defaults.headers, 'Authorization')
@@ -54,6 +55,7 @@ export class RESTfulClient<T> {
 			baseURL,
 		})
 		if (ContextStorages.get()?.authorization)
+			// @ts-expect-error
 			this.http.defaults.headers.Authorization = `Bearer ${ContextStorages.get()?.authorization}`
 		clients.push(this.http)
 
