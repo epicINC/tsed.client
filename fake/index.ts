@@ -76,10 +76,10 @@ export const UpdateDateColumn = DefaultProperty
 
 
 
-export const OneToMany = function <T, K>(a: Func<[], { new(): T }>, b: Func<[T], K> | object, c?: object) {
+export const OneToMany = function <T, K>(a: Func<[any], { new(): T }>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
-export const ManyToOne = function <T, K>(a: Func<[], { new(): T }>, b: Func<[T], K> | object, c?: object) {
+export const ManyToOne = function <T, K>(a: Func<[any], { new(): T }>, b: Func<[T], K> | object, c?: object) {
 	return EmptyPropertyDecorator
 }
 export const JoinColumn = function <T, K>(a: object) {
