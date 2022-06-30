@@ -66,10 +66,12 @@ export const PlatformTest = {
 
 // typeorm
 export const Entity = DefaultClass
+export const ViewEntity = DefaultClass
 export const Column = DefaultProperty
 export const CreateDateColumn = DefaultProperty
 export const PrimaryGeneratedColumn = DefaultProperty
 export const PrimaryColumn = DefaultProperty
+export const ViewColumn = DefaultProperty
 
 export const DeleteDateColumn = DefaultProperty
 export const UpdateDateColumn = DefaultProperty
