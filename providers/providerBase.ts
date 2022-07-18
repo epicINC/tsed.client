@@ -55,12 +55,11 @@ export class RESTfulClient<T> {
 			baseURL,
 		})
 		if (ContextStorages.get()?.authorization)
-			// @ts-expect-error
 			this.http.defaults.headers.Authorization = `Bearer ${ContextStorages.get()?.authorization}`
 		clients.push(this.http)
 
 		this.http.interceptors.response.use(response => {
-			if (response.status > 199 && response.status < 300) return response.data
+			if (response.status > 199 && response.status < 300) return response
 
 			throw new StatusCodeException(response.data.status, response.data.name + ':' + response.data.message)
 		}, error => {
@@ -68,6 +67,8 @@ export class RESTfulClient<T> {
 			return Promise.reject(new StatusCodeException(error.response.data.status, error.response.data.name + ':' + error.response.data.message))
 		})
 	}
+
+	
 
 
 
@@ -83,37 +84,58 @@ export class RESTfulClient<T> {
 	}
 
 
-	get<R = T>(path: string, params?: object): Promise<R> {
-		return this.http.get<R, R>(path, { params })
+	async get<R = T>(path: string, params?: object): Promise<R> {
+		const result = await this.http.get<R>(path, { params })
+		return result.data
 	}
 
 	post<R = T>(path: string, data: object): Promise<R>
 	post<R = T>(path: string, data: object[]): Promise<R[]>
-	post<R = T>(path: string, data: object | object[]): Promise<R | R[]> {
+	async post<R = T>(path: string, data: object | object[]): Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('post')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
-		return this.http.post<R, R>(path, data)
+		const result = await this.http.post<R>(path, data)
+		return result.data
 	}
 
 	patch<R = T>(path: string, data: object): Promise<R>
 	patch<R = T>(path: string, data: object[]): Promise<R[]>
-	patch<R = T>(path: string, data: object | object[]): Promise<R | R[]> {
+	async patch<R = T>(path: string, data: object | object[]): Promise<R | R[]> {
 		if (data === null || data === undefined) throw new ArgumentNull('patch')
 		if (Array.isArray(data) && data.length === 0) return Promise.resolve([])
-		return this.http.patch<R, R>(path, data)
+		const result = await this.http.patch<R>(path, data)
+		return result.data
 	}
 
 
 	/** upsert */
-	put<R = T>(path: string, data: object | object[] | FormData) {
-		return this.http.put<R, R>(path, data)
+	async put<R = T>(path: string, data: object | object[] | FormData) {
+		const result = await this.http.put<R>(path, data)
+		return result.data
 	}
 
 
-	delete<R = T>(path: string, params?: object): Promise<R> {
-		return this.http.delete<R, R>(path, { params })
+	async delete<R = T>(path: string, params?: object): Promise<R> {
+		const result = await this.http.delete<R>(path, { params })
+		return result.data
 	}
 
+
+
+	async downloadData(url: string, params?: any, paramsSerializer?: Func<[any], string>) : Promise<{name: string, data: Blob}> {
+		const response = await this.http.get(url, {
+			responseType: 'blob',
+			params,
+			paramsSerializer
+		})
+
+
+		return {
+			name: response.headers['content-disposition'] && response.headers['content-disposition'].match(/"(.+)"/)[1],
+			// contentType: response.headers['content-type'],
+			data: response.data
+		}
+	}
 
 
 }
@@ -213,5 +235,9 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 				return this.client.delete('/', query)
 		}
 	}
+
+
+
+
 
 }
