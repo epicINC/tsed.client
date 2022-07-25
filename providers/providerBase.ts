@@ -123,7 +123,7 @@ export class RESTfulClient<T> {
 
 
 
-	async downloadData(url: string, params?: any, paramsSerializer?: Func<[any], string>) : Promise<{name: string, data: Blob}> {
+	async downloadData(url: string, params?: any, paramsSerializer?: (e: any) => string) : Promise<{name: string, data: Blob}> {
 		const response = await this.http.get(url, {
 			responseType: 'blob',
 			params,
