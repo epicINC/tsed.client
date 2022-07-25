@@ -55,6 +55,7 @@ export class RESTfulClient<T> {
 			baseURL,
 		})
 		if (ContextStorages.get()?.authorization)
+			// @ts-ignore
 			this.http.defaults.headers.Authorization = `Bearer ${ContextStorages.get()?.authorization}`
 		clients.push(this.http)
 
@@ -131,6 +132,7 @@ export class RESTfulClient<T> {
 
 
 		return {
+			// @ts-ignore
 			name: response.headers['content-disposition'] && response.headers['content-disposition'].match(/"(.+)"/)[1],
 			// contentType: response.headers['content-type'],
 			data: response.data
