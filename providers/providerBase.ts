@@ -10,7 +10,7 @@ const clients: AxiosInstance[] = []
 export function Authorization(token: string) {
 	clients.forEach(e => {
 		if (token)
-			// @ts-expect-error
+			// @ts-ignore
 			e.defaults.headers.Authorization = `Bearer ${token}`
 		else
 			Reflect.deleteProperty(e.defaults.headers, 'Authorization')
@@ -63,7 +63,9 @@ export class RESTfulClient<T> {
 			if (response.status > 199 && response.status < 300) return response
 
 			throw new StatusCodeException(response.data.status, response.data.name + ':' + response.data.message)
-		}, error => {
+		}, 
+		// @ts-ignore
+		error => {
 			if (!error.response.data) return Promise.reject(new StatusCodeException(error.response.status, error.response.statusText))
 			return Promise.reject(new StatusCodeException(error.response.data.status, error.response.data.name + ':' + error.response.data.message))
 		})
