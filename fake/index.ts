@@ -42,6 +42,22 @@ export const Ignore = DefaultProperty
 export const Default = DefaultProperty
 export const Description = DefaultProperty
 export const Integer = DefaultProperty
+export const Enum = DefaultProperty
+export const Groups = DefaultProperty
+export const Email = DefaultProperty
+
+export const array = DefaultProperty
+export const For = DefaultProperty
+export const oneOf = DefaultProperty
+export const Pattern = DefaultProperty
+export const SpecTypes = DefaultProperty
+export const string = DefaultProperty
+
+
+
+
+
+
 
 
 
