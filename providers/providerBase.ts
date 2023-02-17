@@ -129,7 +129,9 @@ export class RESTfulClient<T> {
 		const response = await this.http.get(url, {
 			responseType: 'blob',
 			params,
-			paramsSerializer
+			paramsSerializer: {
+				encode: paramsSerializer
+			}
 		})
 
 
