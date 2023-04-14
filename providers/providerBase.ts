@@ -44,7 +44,7 @@ export interface IProvider<T> {
 	remove(filter: IWhereFilter<T>[]): Promise<T[]>
 }
 
-export class RESTfulClient<T> {
+export class RESTfulClient<T = any> {
 	protected readonly http: AxiosInstance
 
 	constructor(baseURL: string) {
