@@ -91,6 +91,14 @@ export class EnumFlagImpl {
 
 
 
+	translate(data: number, map: Record<number, string>) {
+		if (map[data]) return map[data]
+		const keys = Object.keys(map).map(e => Number(e)).sort((x, y) => x === y ? 0 : (x > y ? -1 : 1))
+		for(let item of keys)
+			if (data & item) return map[item]
+		
+		return map[0] ?? ``
+	}
 
 
 }
