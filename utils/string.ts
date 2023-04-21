@@ -19,10 +19,17 @@ export class StringImpl {
 	}
 
 	normalizeProviderName(data: string) {
-		return this.plural(this.trimeEnd(this.camel(data), 'Provider').toLowerCase())
+		return this.plural(this.trimEnd(this.camel(data), 'Provider').toLowerCase())
 	}
 	
-	trimeEnd(data: string, word: string) {
+	trimStart(data: string, replace: string) {
+		if (!replace || !replace.length || replace.length > data.length) return data
+		if (Array.prototype.some.call(replace, (e: string, i: number) => e !== data[i])) return data
+		return data.substring(replace.length)
+	}
+
+
+	trimEnd(data: string, word: string) {
 		if (word.length > data.length) return data
 
 		do {

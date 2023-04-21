@@ -54,6 +54,27 @@ function toRegex(format: string) {
 
 export class DateTimeImpl {
 
+
+	ensure(arg: Date | string | number) : Date
+	ensure(...args: (Date | string | number)[]) : Date[]
+	ensure(...args: (Date | string | number)[]) : Date | Date[] {
+		if (args.length === 1) return this.ensureOne(args[0])
+		return args.map(e => this.ensureOne(e))
+	}
+
+	private ensureOne(data: Date | string | number) {
+		switch(typeof(data)) {
+			case 'string':
+			case 'number':
+				return new Date(data)
+			default:
+				if (data instanceof Date) return data
+				throw new Error('ensure.argument')
+				break
+		}
+	}
+
+
 	startOf(data: Date, unit: DatePartKey = 'day') {
 		const result = new Date(data.getTime())
 		switch(unit) {
