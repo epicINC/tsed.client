@@ -129,9 +129,7 @@ export class RESTfulClient<T = any> {
 		const response = await this.http.get(url, {
 			responseType: 'blob',
 			params,
-			paramsSerializer: {
-				encode: paramsSerializer
-			}
+			paramsSerializer: paramsSerializer
 		})
 
 
@@ -244,6 +242,24 @@ export abstract class ProviderBase<T extends IThing> implements IProvider<T> {
 
 
 
+// 	async downloadFile(url: string, params?: any, paramsSerializer?: Func<[any], string>) : Promise<{name: string, data: Blob}> {
+// 		const response = await this.$http.get(url, {
+// 			responseType: 'blob',
+// 			params,
+// 			paramsSerializer
+// 		})
+// 		if (response.status !== 200) Errors.httpResult(response.status, response.statusText).throw()
+// 		if (response.headers['content-disposition']) {
+// 			response.headers['content-disposition'].match(/"(.+)"/)
+// 		}
+// 		return {
+// 			name: response.headers['content-disposition'] && response.headers['content-disposition'].match(/"(.+)"/)[1],
+// 			// contentType: response.headers['content-type'],
+// 			data: response.data
+// 		}
+// 	}
+
+// }
 
 
 }
