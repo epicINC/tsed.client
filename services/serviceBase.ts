@@ -62,6 +62,10 @@ export abstract class ServiceBase<T extends IThing> implements IService<T> {
 		return this.provider.query<R>(query)
 	}
 
+	queryBy<R = T>(where: IWhereFilter<T>) {
+		return this.provider.query<R>({ where })
+	}
+
 
 	paging<R = T>(query: IQueryPagingParam<T>) {
 		return this.provider.paging<R>(query)
