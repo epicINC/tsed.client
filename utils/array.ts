@@ -25,6 +25,13 @@ export class ArrayImpl {
 		return data.reduce((r, e) => r+= e, 0)
 	}
 
+	toObject<T, K extends keyof any>(data: T[], keySelector: Func<[T], K>) : Record<K, T> {
+		return data.reduce((r, e) => {
+			r[keySelector(e)] = e
+			return r
+		}, {} as Record<K, T>)
+	}
+
 }
 
 
