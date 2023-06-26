@@ -62,7 +62,7 @@ export class EnumFlagImpl {
 				r.push(e)
 				if (value !== e)
 					r.push(...this.fetchValues(data, e))
-			}
+			} 
 			return r
 		}, [])
 
@@ -89,15 +89,17 @@ export class EnumFlagImpl {
 
 	}
 
+	translate<T>(data: number, enumType: Record<number, T>, sort?: number[]) {
 
+		if (enumType[data] !== undefined) return enumType[data]
+		const keys = sort ?? Object.keys(enumType).map(e => Number(e)).sort((x, y) => x === y ? 0 : (x > y ? -1 : 1))
 
-	translate<T>(data: number, map: Record<number, T>) {
-		if (map[data]) return map[data]
-		const keys = Object.keys(map).map(e => Number(e)).sort((x, y) => x === y ? 0 : (x > y ? -1 : 1))
-		for(let item of keys)
-			if ((data & item) === item) return map[item]
+		for(let item of keys) {
+			// console.log(data, item, (data & item) === item)
+			if (data === item || (data & item) === item) return enumType[item]
+		}
 		
-		return map[0]
+		return `[${data}]`
 	}
 
 
