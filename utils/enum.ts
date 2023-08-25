@@ -99,7 +99,7 @@ export class EnumFlagImpl {
 			if (data === item || (data & item) === item) return enumType[item]
 		}
 		
-		return `[${data}]`
+		return data
 	}
 
 
